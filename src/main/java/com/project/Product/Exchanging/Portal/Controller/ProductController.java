@@ -16,10 +16,10 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @PostMapping("/user/{userId}")  // Make sure this matches EXACTLY with your URL
+    @PostMapping("/user/{userId}")
     public ResponseEntity<Products> createProduct(
             @RequestBody Products products,
-            @PathVariable("userId") Long userId  // Add parameter name explicitly
+            @PathVariable("userId") Long userId
     ) {
         return ResponseEntity.ok(productService.createProduct(products, userId));
     }
@@ -49,7 +49,7 @@ public class ProductController {
 
     @GetMapping("/search/title")
     public ResponseEntity<List<Products>> searchByTitle(@RequestParam String keyword){
-    return ResponseEntity.ok(productService.searchByTitle(keyword));
+        return ResponseEntity.ok(productService.searchByTitle(keyword));
     }
 
     @PutMapping("/{id}")
