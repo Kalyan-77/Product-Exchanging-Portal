@@ -1,5 +1,6 @@
 package com.project.Product.Exchanging.Portal.Model;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -48,6 +49,7 @@ public class Users {
     private Set<Roles> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JacksonInject
     private List<Products> products;
 
 }
