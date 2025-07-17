@@ -49,7 +49,6 @@ public class Users {
     private Set<Roles> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    @JacksonInject
     private List<Products> products;
 
 }
