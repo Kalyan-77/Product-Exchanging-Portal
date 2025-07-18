@@ -4,6 +4,7 @@ import com.project.Product.Exchanging.Portal.Model.Cart;
 import com.project.Product.Exchanging.Portal.Service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Cart> addToCart(
             @RequestParam Long userId,
             @RequestParam Long productId,
@@ -26,11 +28,13 @@ public class CartController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Cart>> getUserCart(@PathVariable Long userId){
         return ResponseEntity.ok(cartService.getUsersCart(userId));
     }
 
     @DeleteMapping("/remove")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> DeleteCart(
             @RequestParam Long userId,
             @RequestParam Long productId){
@@ -39,6 +43,7 @@ public class CartController {
     }
 
     @DeleteMapping("/clear/{userId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<String> clearCart(@PathVariable Long userId){
         cartService.clearCart(userId);
         return ResponseEntity.ok("Cart cleared");
