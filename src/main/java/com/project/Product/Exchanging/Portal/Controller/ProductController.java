@@ -23,8 +23,7 @@ public class ProductController {
     @PostMapping("/user/{userId}")
     public ResponseEntity<Products> createProduct(
             @RequestBody Products products,
-            @PathVariable("userId") Long userId
-    ) {
+            @PathVariable Long userId) {
         return ResponseEntity.ok(productService.createProduct(products, userId));
     }
 
@@ -36,35 +35,41 @@ public class ProductController {
     @PostMapping("/upload/user/{userId}")
     public ResponseEntity<Products> uploadProduct(
             @RequestParam("image") MultipartFile file,
-            @RequestParam("title") String title,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "price", required = false) Double price,
-            @RequestParam(value = "category", required = false) String category,
-            @RequestParam(value = "condition", required = false) String condition,
-            @RequestParam(value = "location", required = false) String location,
-            @PathVariable("userId") Long userId
-    ) {
+            @RequestParam String title,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String condition,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String message,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String number,
+            @PathVariable Long userId) {
         try {
             String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            String uploadDir = "uploads/";
-            Path path = Paths.get(uploadDir + filename);
-            Files.createDirectories(path.getParent()); // Ensure the directory exists
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            Path uploadPath = Paths.get("uploads", filename);
+            Files.createDirectories(uploadPath.getParent());
+            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
 
             Products product = new Products();
             product.setTitle(title);
             product.setDescription(description);
-            product.setPrice(price != null ? price : 0.0);
+            product.setPrice(price);
             product.setCategory(category);
             product.setCondition(condition);
             product.setLocation(location);
-            product.setImage(path.toString());
+            product.setMessage(message);
+            product.setEmail(email);
+            product.setNumber(number);
+            product.setImage("/uploads/" + filename); // ✅ Correct URL path for frontend
 
             return ResponseEntity.ok(productService.createProduct(product, userId));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Products> getProductById(@PathVariable Long id) {
@@ -76,6 +81,11 @@ public class ProductController {
     @GetMapping("/search/category")
     public ResponseEntity<List<Products>> searchByCategory(@RequestParam String category) {
         return ResponseEntity.ok(productService.searchByCategory(category));
+    }
+
+    @GetMapping("/user/{ownerId}")
+    public ResponseEntity<List<Products>> getProductsByOwner(@PathVariable Long ownerId) {
+        return ResponseEntity.ok(productService.getProductsByUser(ownerId));
     }
 
     @GetMapping("/search/title")

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 @Entity//creates the entities(table) with above fields
 @Table(name = "users")
 @Data//used to automatically generate commonly used boilerplate code(constructors, toStrinf....)
+@AllArgsConstructor
 @NoArgsConstructor// used to automatically generate a no-argument constructor
 public class Users {
 

@@ -32,7 +32,7 @@ public class Products {
     private String description;
 
     @Size(max = 255, message = "Image URL is too long")
-    private String image; // URL or base64 string
+    private String image;
 
     private String category;
 
@@ -40,7 +40,7 @@ public class Products {
 
     private String condition;
 
-    private String Location;
+    private String location;
 
     private String number;
 
@@ -52,6 +52,6 @@ public class Products {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-        @JsonIgnore // Prevents serialization of owner
+    @JsonIgnore
     private Users owner;
 }

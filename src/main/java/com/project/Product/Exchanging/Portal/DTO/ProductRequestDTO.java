@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ProductRequestDTO {
 
@@ -20,6 +22,12 @@ public class ProductRequestDTO {
     private String image;
 
     private String category;
+    private LocalDateTime created_at;
 
     private Double price;
+    private String location;
+    private String condition;
+    private String email;
+    private String number;
+    private String message;
 }

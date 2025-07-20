@@ -13,7 +13,13 @@ public class ProductResponseDTO {
     private String image;
     private String category;
     private Double price;
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
     private Long ownerId;
-    private String ownerName; // Optional, if you want to show who posted the product
+    private String ownerName;
+    private String location;
+    private String condition;
+    private String email;
+    private String number;
+    private String message;
+
 }
