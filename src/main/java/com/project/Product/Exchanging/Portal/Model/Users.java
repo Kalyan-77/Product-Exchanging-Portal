@@ -13,10 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity//creates the entities(table) with above fields
+@Entity // creates the entities(table) with above fields
 @Table(name = "users")
-@Data//used to automatically generate commonly used boilerplate code(constructors, toStrinf....)
-@NoArgsConstructor// used to automatically generate a no-argument constructor
+@Data // used to automatically generate commonly used boilerplate code (constructors, toString, etc.)
+@NoArgsConstructor // used to automatically generate a no-argument constructor
 public class Users {
 
     @Id
@@ -37,7 +37,6 @@ public class Users {
     @Column(unique = true)
     private String email;
 
-
     private LocalDateTime created_at = LocalDateTime.now();
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -51,5 +50,4 @@ public class Users {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Products> products;
-
 }
