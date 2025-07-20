@@ -14,11 +14,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity//creates the entities(table) with above fields
+@Entity
 @Table(name = "users")
-@Data//used to automatically generate commonly used boilerplate code(constructors, toStrinf....)
+@Data // Automatically generates getters, setters, toString, equals, hashCode
 @AllArgsConstructor
-@NoArgsConstructor// used to automatically generate a no-argument constructor
+@NoArgsConstructor // Generates a no-argument constructor
 public class Users {
 
     @Id
@@ -39,19 +39,17 @@ public class Users {
     @Column(unique = true)
     private String email;
 
-
     private LocalDateTime created_at = LocalDateTime.now();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Roles> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Products> products;
-
 }
