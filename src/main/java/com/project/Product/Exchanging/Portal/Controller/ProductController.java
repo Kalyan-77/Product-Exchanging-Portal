@@ -1,12 +1,16 @@
 package com.project.Product.Exchanging.Portal.Controller;
 
-
 import com.project.Product.Exchanging.Portal.Model.Products;
 import com.project.Product.Exchanging.Portal.Service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @RestController
@@ -25,43 +29,68 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Products>> getAllProducts(){
-        return  ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<List<Products>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
+    @PostMapping("/upload/user/{userId}")
+    public ResponseEntity<Products> uploadProduct(
+            @RequestParam("image") MultipartFile file,
+            @RequestParam("title") String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "price", required = false) Double price,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "condition", required = false) String condition,
+            @RequestParam(value = "location", required = false) String location,
+            @PathVariable("userId") Long userId
+    ) {
+        try {
+            String filename = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            String uploadDir = "uploads/";
+            Path path = Paths.get(uploadDir + filename);
+            Files.createDirectories(path.getParent()); // Ensure the directory exists
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+            Products product = new Products();
+            product.setTitle(title);
+            product.setDescription(description);
+            product.setPrice(price != null ? price : 0.0);
+            product.setCategory(category);
+            product.setCondition(condition);
+            product.setLocation(location);
+            product.setImage(path.toString());
+
+            return ResponseEntity.ok(productService.createProduct(product, userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Products> getProductById(@PathVariable Long id){
+    public ResponseEntity<Products> getProductById(@PathVariable Long id) {
         return productService.getProductById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-//    @GetMapping("/user/{userid}")
-//    public ResponseEntity<List<Products>> getProductsByOwner(@PathVariable Long userId){
-//        return   ResponseEntity.ok(productService.getProductByOwner(userId));
-//    }
-
     @GetMapping("/search/category")
-    public ResponseEntity<List<Products>> searchByCategory(@RequestParam String category){
+    public ResponseEntity<List<Products>> searchByCategory(@RequestParam String category) {
         return ResponseEntity.ok(productService.searchByCategory(category));
     }
 
     @GetMapping("/search/title")
-    public ResponseEntity<List<Products>> searchByTitle(@RequestParam String keyword){
+    public ResponseEntity<List<Products>> searchByTitle(@RequestParam String keyword) {
         return ResponseEntity.ok(productService.searchByTitle(keyword));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Products> updateProduct(@PathVariable Long id, @RequestBody Products products){
+    public ResponseEntity<Products> updateProduct(@PathVariable Long id, @RequestBody Products products) {
         return ResponseEntity.ok(productService.updateProduct(id, products));
-
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return  ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
-
 }

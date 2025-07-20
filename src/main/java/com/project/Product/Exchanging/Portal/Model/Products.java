@@ -1,6 +1,7 @@
 package com.project.Product.Exchanging.Portal.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "products")
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Products {
 
     @Id
@@ -36,10 +38,20 @@ public class Products {
 
     private Double price;
 
+    private String condition;
+
+    private String Location;
+
+    private String number;
+
+    private String email;
+
+    private String message;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    @JsonIgnore // Prevents serialization of owner
+        @JsonIgnore // Prevents serialization of owner
     private Users owner;
 }

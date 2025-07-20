@@ -1,6 +1,6 @@
 package com.project.Product.Exchanging.Portal.Model;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,10 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity//creates the entities(table) with above fields
+@Entity // creates the entities(table) with above fields
 @Table(name = "users")
-@Data//used to automatically generate commonly used boilerplate code(constructors, toStrinf....)
-@NoArgsConstructor// used to automatically generate a no-argument constructor
+@Data // used to automatically generate commonly used boilerplate code (constructors, toString, etc.)
+@NoArgsConstructor // used to automatically generate a no-argument constructor
 public class Users {
 
     @Id
@@ -37,8 +37,7 @@ public class Users {
     @Column(unique = true)
     private String email;
 
-
-    private LocalDateTime created_at;
+    private LocalDateTime created_at = LocalDateTime.now();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -49,6 +48,6 @@ public class Users {
     private Set<Roles> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Products> products;
-
 }

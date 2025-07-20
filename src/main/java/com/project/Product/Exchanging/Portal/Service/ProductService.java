@@ -57,6 +57,11 @@ public class ProductService {
             products.setImage(updatedProduct.getImage());
             products.setCategory(updatedProduct.getCategory());
             products.setPrice(updatedProduct.getPrice());
+            products.setCondition(updatedProduct.getCondition());
+            products.setLocation(updatedProduct.getLocation());
+            products.setNumber(updatedProduct.getNumber());
+            products.setEmail(updatedProduct.getEmail());
+            products.setMessage(updatedProduct.getMessage());
             return productRepository.save(products);
         }).orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }

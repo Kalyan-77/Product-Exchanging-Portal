@@ -36,6 +36,7 @@ public class CartService {
 
         return cartRepository.save(cart);
     }
+
     public List<Cart> getUsersCart(Long userId){
         Users users = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return cartRepository.findByUser(users);

@@ -28,14 +28,24 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Users updateUser(Long id, Users updatedUser){
-        return userRepository.findById(id).map(users -> {
-            users.setUsername(updatedUser.getUsername());
-            users.setEmail(updatedUser.getEmail());
-            users.setPassword(updatedUser.getPassword());
-            return userRepository.save(users);
-        }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    public Users updateUser(Long id, Users updatedUser) {
+        Users existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Check if email is changing and already exists for someone else
+        if (!existingUser.getEmail().equals(updatedUser.getEmail())) {
+            if (userRepository.findByEmail(updatedUser.getEmail()).isPresent()) {
+                throw new RuntimeException("Email already in use by another user");
+            }
+        }
+
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPassword(updatedUser.getPassword());
+
+        return userRepository.save(existingUser);
     }
+
 
     public void deleteUser(Long id){
         userRepository.deleteById(id);
