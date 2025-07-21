@@ -78,20 +78,20 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/search/category")
-    public ResponseEntity<List<Products>> searchByCategory(@RequestParam String category) {
-        return ResponseEntity.ok(productService.searchByCategory(category));
-    }
+        @GetMapping("/search/category")
+        public ResponseEntity<List<Products>> searchByCategory(@RequestParam String category) {
+            return ResponseEntity.ok(productService.searchByCategory(category));
+        }
 
     @GetMapping("/user/{ownerId}")
     public ResponseEntity<List<Products>> getProductsByOwner(@PathVariable Long ownerId) {
         return ResponseEntity.ok(productService.getProductsByUser(ownerId));
     }
 
-    @GetMapping("/search/title")
-    public ResponseEntity<List<Products>> searchByTitle(@RequestParam String keyword) {
-        return ResponseEntity.ok(productService.searchByTitle(keyword));
-    }
+        @GetMapping("/search/title")
+        public ResponseEntity<List<Products>> searchByTitle(@RequestParam String keyword) {
+            return ResponseEntity.ok(productService.searchByTitle(keyword));
+        }
 
     @PutMapping("/{id}")
     public ResponseEntity<Products> updateProduct(@PathVariable Long id, @RequestBody Products products) {
